@@ -1,13 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <gheader></gheader>
     <router-view/>
+    <gfooter></gfooter>
   </div>
 </template>
 
 <script>
+import gheader from './base/header'
+import gfooter from './base/footer'
 export default {
-  name: 'app'
+  components: {
+    gheader,
+    gfooter
+  }
 }
 </script>
 
