@@ -5,8 +5,10 @@ import App from './App'
 import router from './router'
 import VueResource from 'vue-resource'
 import VueLazyload from 'vue-lazyload'
+import infiniteScroll from 'vue-infinite-scroll'
 
 Vue.use(VueResource)
+Vue.use(infiniteScroll)
 Vue.config.productionTip = false
 
 Vue.use(VueLazyload, {

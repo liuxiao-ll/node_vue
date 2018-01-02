@@ -8,13 +8,13 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/goods',
+      path: '/good',
       name: 'goodList',
       component: goodList
     },
     {
       path: '',
-      redirect: '/goods'
+      redirect: '/good'
     }
   ]
 })
