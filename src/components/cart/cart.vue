@@ -126,7 +126,7 @@
                 Item total: <span class="total-price">{{totalPrice}}</span>
               </div>
               <div class="btn-wrap">
-                <a class="btn btn--red" :class="{'btn--dis':checkedCount==0}">Checkout</a>
+                <a class="btn btn--red" :class="{'btn--dis':checkedCount==0}" @click="checkOut">结算</a>
               </div>
             </div>
           </div>
@@ -200,7 +200,6 @@
         }).then((res) => {
           res = res.data
           if (res.status === '0') {
-            console.log(res)
           }
         })
       },
@@ -217,6 +216,13 @@
             console.log('suc')
           }
         })
+      },
+      checkOut() {
+        if (this.checkedCount > 0) {
+          this.$router.push({
+            path: '/address'
+          })
+        }
       }
     },
     created() {

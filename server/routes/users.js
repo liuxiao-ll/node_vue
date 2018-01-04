@@ -176,4 +176,148 @@ router.post('/editCheckAll', function (req, res, next) {
   })
 })
 
+// 查询用户地址接口
+router.get('/addressList', function (req, res, next) {
+  var userId = req.cookies.userId
+  User.findOne({userId: userId}, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: doc.addressList.reverse()
+      })
+    }
+  })
+})
+
+// 设置默认地址
+router.post('/setDefault', (req, res, next) => {
+  let userId = req.cookies.userId
+  let addressId = req.body.addressId
+  User.findOne({userId: userId}, (err, doc) => {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      let addressList = doc.addressList
+      addressList.forEach((item) => {
+        if (item.addressId === addressId) {
+          item.isDefault = true
+        } else {
+          item.isDefault = false
+        }
+      })
+      doc.save((err1, doc1) => {
+        if (err1) {
+          res.json({
+            status: '1',
+            msg: err1.message,
+            result: ''
+          })
+        } else {
+          res.json({
+            status: '0',
+            msg: '',
+            result: ''
+          })
+        }
+      })
+    }
+  })
+})
+
+// 删除地址接口
+router.post('/delAddress', (req, res, next) => {
+  let userId = req.cookies.userId
+  let addressId = req.body.addressId
+  console.log(addressId)
+  User.update({
+    userId: userId
+  }, {
+    $pull: {
+      'addressList': {
+        'addressId': addressId
+      }
+    }
+  }, (err, doc) => {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
+    }
+  })
+})
+
+// 添加收获地址
+router.post('/addAddress', (req, res, next) => {
+  let userName = req.body.userName
+  let streetName = req.body.streetName
+  let postCode = parseInt(req.body.postCode)
+  let tel = parseInt(req.body.tel)
+  let userId = req.cookies.userId
+  User.findOne({
+    userId: userId
+  }, (err, doc) => {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      let addressList = doc.addressList
+      let arr = []
+      addressList.forEach((item) => {
+        arr.push(item.addressId)
+      })
+      let max = Math.max(...arr)
+      let obj = {
+        addressId: max + 1,
+        userName: userName,
+        streetName: streetName,
+        postCode: postCode,
+        tel: tel,
+        isDefault: false
+      }
+      addressList.push(obj)
+      doc.save((err2, doc2) => {
+        if (err2) {
+          res.json({
+            status: '1',
+            msg: err.message,
+            result: ''
+          })
+        } else {
+          res.json({
+            status: '0',
+            msg: '',
+            result: 'suc'
+          })
+        }
+      })
+    }
+  })
+})
+
+// 生成订单
+router.post('/payment', (req, res, next) => {
+  
+})
 module.exports = router
