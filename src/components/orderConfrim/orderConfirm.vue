@@ -112,7 +112,7 @@
                 </li>
                 <li class="order-total-price">
                   <span>Order total:</span>
-                  <span>5230</span>
+                  <span>{{totalPrice}}</span>
                 </li>
               </ul>
             </div>
@@ -161,6 +161,21 @@
             return item.checked === '1'
           })
           return arr
+        },
+        payment() {
+          let addressId = this.$route.query.addressId
+          this.$http.post('/users/payment', {
+            addressId: addressId,
+            orderTotal: this.totalPrice
+          }).then((res) => {
+            res = res.data
+            if (res.status === '0') {
+              res = res.result
+              this.$router.push({
+                path: `/orderSuccess?orderId=${res.orderId}&orderTotal=${res.orderTotal}`
+              })
+            }
+          })
         }
       }
     }
